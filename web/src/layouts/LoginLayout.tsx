@@ -56,9 +56,7 @@ const LoginLayout = function (props: Props) {
             >
                 <Container maxWidth="xs" className={styles.rootContainer}>
                     <Grid container>
-                        <Grid xs={12}>
-                            {logo}
-                        </Grid>
+                        <Grid xs={12}>{logo}</Grid>
                         {props.title ? (
                             <Grid xs={12}>
                                 <TypographyWithTooltip
