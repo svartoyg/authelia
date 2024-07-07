@@ -57,6 +57,8 @@ func UserSessionElevationGET(ctx *middlewares.AutheliaCtx) {
 			info model.UserInfo
 		)
 
+		response.FactorKnowledge = userSession.AuthenticationMethodRefs.FactorKnowledge()
+
 		info, err = ctx.Providers.StorageProvider.LoadUserInfo(ctx, userSession.Username)
 
 		has = info.HasTOTP || info.HasWebAuthn || info.HasDuo

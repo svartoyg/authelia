@@ -15,8 +15,8 @@ import { useQueryParam } from "@hooks/QueryParam";
 import { useWorkflow } from "@hooks/Workflow";
 import LoginLayout from "@layouts/LoginLayout";
 import { IsCapsLockModified } from "@services/CapsLock";
-import { postFirstFactor } from "@services/FirstFactor";
-import PasskeyForm from "@views/LoginPortal/FirstFactor/PasskeyForm.tsx";
+import { postFirstFactor } from "@services/Password";
+import PasskeyForm from "@views/LoginPortal/FirstFactor/PasskeyForm";
 
 export interface Props {
     disabled: boolean;

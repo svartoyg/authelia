@@ -19,7 +19,7 @@ import {
 } from "@models/WebAuthn";
 import {
     AuthenticationOKResponse,
-    FirstFactorWebAuthnPath,
+    FirstFactorPasskeyPath,
     OptionalDataServiceResponse,
     ServiceResponse,
     WebAuthnAssertionPath,
@@ -156,7 +156,7 @@ export async function postWebAuthnResponse(
 export async function getWebAuthnPasskeyOptions(): Promise<PublicKeyCredentialRequestOptionsStatus> {
     let response: AxiosResponse<ServiceResponse<CredentialRequest>>;
 
-    response = await axios.get<ServiceResponse<CredentialRequest>>(FirstFactorWebAuthnPath);
+    response = await axios.get<ServiceResponse<CredentialRequest>>(FirstFactorPasskeyPath);
 
     if (response.data.status !== "OK" || response.data.data == null) {
         return {
@@ -170,26 +170,47 @@ export async function getWebAuthnPasskeyOptions(): Promise<PublicKeyCredentialRe
     };
 }
 
+interface PostFirstFactorPasskeyBody {
+    response: AuthenticationResponseJSON;
+    keepMeLoggedIn: boolean;
+    targetURL?: string;
+    requestMethod?: string;
+    workflow?: string;
+}
+
 export async function postWebAuthnPasskeyResponse(
     response: AuthenticationResponseJSON,
+    keepMeLoggedIn: boolean,
     targetURL?: string | undefined,
+    requestMethod?: string,
     workflow?: string,
-    workflowID?: string,
 ) {
-    if (response.response.userHandle) {
+    const data: PostFirstFactorPasskeyBody = {
+        response,
+        keepMeLoggedIn,
+    };
+
+    if (data.response.response.userHandle) {
         // Encode the userHandle to match the typing on the backend.
-        response.response.userHandle = btoa(response.response.userHandle)
+        data.response.response.userHandle = btoa(data.response.response.userHandle)
             .replace(/\+/g, "-")
             .replace(/\//g, "_")
             .replace(/=/g, "");
     }
 
-    return axios.post<ServiceResponse<SignInResponse>>(FirstFactorWebAuthnPath, {
-        response: response,
-        targetURL: targetURL,
-        workflow: workflow,
-        workflowID: workflowID,
-    });
+    if (targetURL) {
+        data.targetURL = targetURL;
+    }
+
+    if (requestMethod) {
+        data.requestMethod = requestMethod;
+    }
+
+    if (workflow) {
+        data.workflow = workflow;
+    }
+
+    return axios.post<ServiceResponse<SignInResponse>>(FirstFactorPasskeyPath, data);
 }
 
 export async function getWebAuthnRegistrationOptions(

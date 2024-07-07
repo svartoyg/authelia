@@ -34,8 +34,21 @@ func (s *UserSession) AuthenticationLevel() authentication.Level {
 	}
 }
 
-// SetOneFactor sets the 1FA AMR's and expected property values for one factor authentication.
-func (s *UserSession) SetOneFactor(now time.Time, details *authentication.UserDetails, keepMeLoggedIn bool) {
+// SetOneFactorPassword sets the 1FA AMR's and expected property values for one factor password authentication.
+func (s *UserSession) SetOneFactorPassword(now time.Time, details *authentication.UserDetails, keepMeLoggedIn bool) {
+	s.setOneFactor(now, details, keepMeLoggedIn)
+
+	s.AuthenticationMethodRefs.UsernameAndPassword = true
+}
+
+// SetOneFactorPasskey sets the 1FA AMR's and expected property values for one factor passkey authentication.
+func (s *UserSession) SetOneFactorPasskey(now time.Time, details *authentication.UserDetails, keepMeLoggedIn, hardware, userPresence, userVerified bool) {
+	s.setOneFactor(now, details, keepMeLoggedIn)
+
+	s.setWebAuthn(hardware, userPresence, userVerified)
+}
+
+func (s *UserSession) setOneFactor(now time.Time, details *authentication.UserDetails, keepMeLoggedIn bool) {
 	s.FirstFactorAuthnTimestamp = now.Unix()
 	s.LastActivity = now.Unix()
 
@@ -45,13 +58,6 @@ func (s *UserSession) SetOneFactor(now time.Time, details *authentication.UserDe
 	s.DisplayName = details.DisplayName
 	s.Groups = details.Groups
 	s.Emails = details.Emails
-
-	s.AuthenticationMethodRefs.UsernameAndPassword = true
-}
-
-func (s *UserSession) setTwoFactor(now time.Time) {
-	s.SecondFactorAuthnTimestamp = now.Unix()
-	s.LastActivity = now.Unix()
 }
 
 // SetTwoFactorTOTP sets the relevant TOTP AMR's and sets the factor to 2FA.
@@ -70,6 +76,21 @@ func (s *UserSession) SetTwoFactorDuo(now time.Time) {
 func (s *UserSession) SetTwoFactorWebAuthn(now time.Time, hardware, userPresence, userVerified bool) {
 	s.setTwoFactor(now)
 
+	s.setWebAuthn(hardware, userPresence, userVerified)
+}
+
+func (s *UserSession) SetTwoFactorPassword(now time.Time) {
+	s.setTwoFactor(now)
+
+	s.AuthenticationMethodRefs.UsernameAndPassword = true
+}
+
+func (s *UserSession) setTwoFactor(now time.Time) {
+	s.SecondFactorAuthnTimestamp = now.Unix()
+	s.LastActivity = now.Unix()
+}
+
+func (s *UserSession) setWebAuthn(hardware, userPresence, userVerified bool) {
 	s.AuthenticationMethodRefs.WebAuthn = true
 	s.AuthenticationMethodRefs.WebAuthnUserPresence, s.AuthenticationMethodRefs.WebAuthnUserVerified = userPresence, userVerified
 

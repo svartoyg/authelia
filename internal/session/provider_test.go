@@ -84,7 +84,7 @@ func TestShouldSetSessionAuthenticationLevels(t *testing.T) {
 
 	session, _ := provider.GetSession(ctx)
 
-	session.SetOneFactor(timeOneFactor, &authentication.UserDetails{Username: testUsername}, false)
+	session.SetOneFactorPassword(timeOneFactor, &authentication.UserDetails{Username: testUsername}, false)
 
 	err = provider.SaveSession(ctx, session)
 	assert.NoError(t, err)
@@ -158,7 +158,7 @@ func TestShouldSetSessionAuthenticationLevelsAMR(t *testing.T) {
 
 	session, _ := provider.GetSession(ctx)
 
-	session.SetOneFactor(timeOneFactor, &authentication.UserDetails{Username: testUsername}, false)
+	session.SetOneFactorPassword(timeOneFactor, &authentication.UserDetails{Username: testUsername}, false)
 
 	err = provider.SaveSession(ctx, session)
 	assert.NoError(t, err)

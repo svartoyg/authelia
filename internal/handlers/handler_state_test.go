@@ -80,6 +80,7 @@ func (s *StateGetSuite) TestShouldReturnAuthenticationLevelFromSession() {
 			Username:              "john",
 			DefaultRedirectionURL: "https://www.example.com",
 			AuthenticationLevel:   authentication.OneFactor,
+			FactorKnowledge:       true,
 		},
 	}
 	actualBody := Response{}

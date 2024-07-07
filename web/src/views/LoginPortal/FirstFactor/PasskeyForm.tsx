@@ -4,7 +4,7 @@ import { Button, CircularProgress, Divider, Grid, Typography } from "@mui/materi
 import { useTranslation } from "react-i18next";
 
 import PasskeyIcon from "@components/PasskeyIcon";
-import { RedirectionURL } from "@constants/SearchParams";
+import { RedirectionURL, RequestMethod } from "@constants/SearchParams";
 import { useIsMountedRef } from "@hooks/Mounted";
 import { useQueryParam } from "@hooks/QueryParam";
 import { useWorkflow } from "@hooks/Workflow";
@@ -25,7 +25,8 @@ const PasskeyForm = function (props: Props) {
     const { t: translate } = useTranslation();
 
     const redirectionURL = useQueryParam(RedirectionURL);
-    const [workflow, workflowID] = useWorkflow();
+    const requestMethod = useQueryParam(RequestMethod);
+    const [workflow] = useWorkflow();
     const mounted = useIsMountedRef();
 
     const [loading, setLoading] = useState(false);
@@ -82,7 +83,13 @@ const PasskeyForm = function (props: Props) {
 
             if (!mounted.current) return;
 
-            const response = await postWebAuthnPasskeyResponse(result.response, redirectionURL, workflow, workflowID);
+            const response = await postWebAuthnPasskeyResponse(
+                result.response,
+                props.rememberMe,
+                redirectionURL,
+                requestMethod,
+                workflow,
+            );
 
             handleAuthenticationStop();
 
@@ -105,13 +112,13 @@ const PasskeyForm = function (props: Props) {
         mounted,
         loading,
         handleAuthenticationStart,
+        props,
         redirectionURL,
+        requestMethod,
         workflow,
-        workflowID,
+        handleAuthenticationStop,
         onSignInErrorCallback,
         translate,
-        handleAuthenticationStop,
-        props,
     ]);
 
     return (

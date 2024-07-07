@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
+	"github.com/authelia/authelia/v4/internal/webauthn"
 	"os"
 	"os/user"
 	"strconv"
@@ -34,7 +35,6 @@ import (
 	"github.com/authelia/authelia/v4/internal/templates"
 	"github.com/authelia/authelia/v4/internal/totp"
 	"github.com/authelia/authelia/v4/internal/utils"
-	"github.com/authelia/authelia/v4/internal/webauthn"
 )
 
 // NewCmdCtx returns a new CmdCtx.
@@ -165,7 +165,7 @@ func (ctx *CmdCtx) LoadProviders() (warns, errs []error) {
 		errs = append(errs, err)
 	}
 
-	if ctx.providers.WebAuthn, err = webauthn.New(ctx.config); err != nil {
+	if ctx.providers.MetaDataService, err = webauthn.NewMetaDataProvider(ctx.config); err != nil {
 		errs = append(errs, err)
 	}
 
