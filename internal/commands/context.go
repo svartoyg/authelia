@@ -141,6 +141,8 @@ func (ctx *CmdCtx) LoadProviders() (warns, errs []error) {
 		return warns, errs
 	}
 
+	ctx.log.WithFields(map[string]any{"database": ctx.config.Session.Redis.DatabaseIndex}).Debug("Configuring Redis")
+
 	ctx.providers.StorageProvider = getStorageProvider(ctx)
 
 	ctx.providers.Authorizer = authorization.NewAuthorizer(ctx.config)

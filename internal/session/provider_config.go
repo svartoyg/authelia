@@ -121,6 +121,8 @@ func NewSessionProvider(config schema.Session, certPool *x509.CertPool) (name st
 
 			name = "redis-sentinel"
 
+			logging.Logger().WithFields(map[string]any{"database": config.Redis.DatabaseIndex}).Debug("Configuring Redis Sentinel")
+
 			provider, err = redis.NewFailoverCluster(redis.FailoverConfig{
 				Logger:           logging.LoggerCtxPrintf(logrus.TraceLevel),
 				MasterName:       config.Redis.HighAvailability.SentinelName,
@@ -150,6 +152,8 @@ func NewSessionProvider(config schema.Session, certPool *x509.CertPool) (name st
 			} else {
 				addr = fmt.Sprintf("%s:%d", config.Redis.Host, config.Redis.Port)
 			}
+
+			logging.Logger().WithFields(map[string]any{"database": config.Redis.DatabaseIndex}).Debug("Configuring Redis Standalone")
 
 			provider, err = redis.New(redis.Config{
 				Logger:          logging.LoggerCtxPrintf(logrus.TraceLevel),
