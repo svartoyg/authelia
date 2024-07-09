@@ -50,7 +50,7 @@ func TestUserSessionElevationGET(t *testing.T) {
 					HasDuo:      true,
 				}, nil)
 			},
-			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":false,"can_skip_second_factor":false,"elevated":false,"expires":0}}`,
+			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":false,"can_skip_second_factor":false,"factor_knowledge":true,"elevated":false,"expires":0}}`,
 			fasthttp.StatusOK,
 			nil,
 		},
@@ -76,7 +76,7 @@ func TestUserSessionElevationGET(t *testing.T) {
 					HasDuo:      true,
 				}, nil)
 			},
-			`{"status":"OK","data":{"require_second_factor":true,"skip_second_factor":false,"can_skip_second_factor":false,"elevated":false,"expires":0}}`,
+			`{"status":"OK","data":{"require_second_factor":true,"skip_second_factor":false,"can_skip_second_factor":false,"factor_knowledge":true,"elevated":false,"expires":0}}`,
 			fasthttp.StatusOK,
 			nil,
 		},
@@ -102,7 +102,7 @@ func TestUserSessionElevationGET(t *testing.T) {
 					HasDuo:      false,
 				}, nil)
 			},
-			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":false,"can_skip_second_factor":false,"elevated":false,"expires":0}}`,
+			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":false,"can_skip_second_factor":false,"factor_knowledge":true,"elevated":false,"expires":0}}`,
 			fasthttp.StatusOK,
 			nil,
 		},
@@ -128,7 +128,7 @@ func TestUserSessionElevationGET(t *testing.T) {
 					HasDuo:      true,
 				}, nil)
 			},
-			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":false,"can_skip_second_factor":true,"elevated":false,"expires":0}}`,
+			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":false,"can_skip_second_factor":true,"factor_knowledge":true,"elevated":false,"expires":0}}`,
 			fasthttp.StatusOK,
 			nil,
 		},
@@ -145,7 +145,7 @@ func TestUserSessionElevationGET(t *testing.T) {
 
 				require.NoError(t, mock.Ctx.SaveSession(us))
 			},
-			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":false,"can_skip_second_factor":false,"elevated":false,"expires":0}}`,
+			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":false,"can_skip_second_factor":false,"factor_knowledge":false,"elevated":false,"expires":0}}`,
 			fasthttp.StatusOK,
 			nil,
 		},
@@ -164,7 +164,7 @@ func TestUserSessionElevationGET(t *testing.T) {
 
 				require.NoError(t, mock.Ctx.SaveSession(us))
 			},
-			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":true,"can_skip_second_factor":false,"elevated":false,"expires":0}}`,
+			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":true,"can_skip_second_factor":false,"factor_knowledge":false,"elevated":false,"expires":0}}`,
 			fasthttp.StatusOK,
 			nil,
 		},
@@ -208,7 +208,7 @@ func TestUserSessionElevationGET(t *testing.T) {
 
 				require.NoError(t, mock.Ctx.SaveSession(us))
 			},
-			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":true,"can_skip_second_factor":false,"elevated":true,"expires":600}}`,
+			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":true,"can_skip_second_factor":false,"factor_knowledge":false,"elevated":true,"expires":600}}`,
 			fasthttp.StatusOK,
 			nil,
 		},
@@ -230,7 +230,7 @@ func TestUserSessionElevationGET(t *testing.T) {
 
 				require.NoError(t, mock.Ctx.SaveSession(us))
 			},
-			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":false,"can_skip_second_factor":false,"elevated":true,"expires":600}}`,
+			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":false,"can_skip_second_factor":false,"factor_knowledge":false,"elevated":true,"expires":600}}`,
 			fasthttp.StatusOK,
 			nil,
 		},
@@ -252,7 +252,7 @@ func TestUserSessionElevationGET(t *testing.T) {
 
 				require.NoError(t, mock.Ctx.SaveSession(us))
 			},
-			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":false,"can_skip_second_factor":false,"elevated":false,"expires":0}}`,
+			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":false,"can_skip_second_factor":false,"factor_knowledge":false,"elevated":false,"expires":0}}`,
 			fasthttp.StatusOK,
 			func(t *testing.T, mock *mocks.MockAutheliaCtx) {
 				us, err := mock.Ctx.GetSession()
@@ -282,7 +282,7 @@ func TestUserSessionElevationGET(t *testing.T) {
 
 				require.NoError(t, mock.Ctx.SaveSession(us))
 			},
-			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":false,"can_skip_second_factor":false,"elevated":false,"expires":-60}}`,
+			`{"status":"OK","data":{"require_second_factor":false,"skip_second_factor":false,"can_skip_second_factor":false,"factor_knowledge":false,"elevated":false,"expires":-60}}`,
 			fasthttp.StatusOK,
 			func(t *testing.T, mock *mocks.MockAutheliaCtx) {
 				us, err := mock.Ctx.GetSession()

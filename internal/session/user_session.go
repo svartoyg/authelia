@@ -38,6 +38,7 @@ func (s *UserSession) AuthenticationLevel() authentication.Level {
 func (s *UserSession) SetOneFactorPassword(now time.Time, details *authentication.UserDetails, keepMeLoggedIn bool) {
 	s.setOneFactor(now, details, keepMeLoggedIn)
 
+	s.AuthenticationMethodRefs.KnowledgeBasedAuthentication = true
 	s.AuthenticationMethodRefs.UsernameAndPassword = true
 }
 
@@ -82,6 +83,7 @@ func (s *UserSession) SetTwoFactorWebAuthn(now time.Time, hardware, userPresence
 func (s *UserSession) SetTwoFactorPassword(now time.Time) {
 	s.setTwoFactor(now)
 
+	s.AuthenticationMethodRefs.KnowledgeBasedAuthentication = true
 	s.AuthenticationMethodRefs.UsernameAndPassword = true
 }
 

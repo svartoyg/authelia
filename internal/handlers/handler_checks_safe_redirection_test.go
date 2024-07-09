@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/valyala/fasthttp"
 
+	"github.com/authelia/authelia/v4/internal/authorization"
 	"github.com/authelia/authelia/v4/internal/mocks"
-	"github.com/authelia/authelia/v4/internal/oidc"
 	"github.com/authelia/authelia/v4/internal/session"
 )
 
@@ -28,28 +28,28 @@ func TestCheckSafeRedirection(t *testing.T) {
 		},
 		{
 			"ShouldReturnTrueOnGoodDomain",
-			session.UserSession{CookieDomain: "example.com", Username: "john", AuthenticationMethodRefs: oidc.AuthenticationMethodsReferences{UsernameAndPassword: true}},
+			session.UserSession{CookieDomain: "example.com", Username: "john", AuthenticationMethodRefs: authorization.AuthenticationMethodsReferences{UsernameAndPassword: true}},
 			"https://myapp.example.com",
 			fasthttp.StatusOK,
 			true,
 		},
 		{
 			"ShouldReturnFalseOnGoodDomainWithBadScheme",
-			session.UserSession{CookieDomain: "example.com", Username: "john", AuthenticationMethodRefs: oidc.AuthenticationMethodsReferences{UsernameAndPassword: true}},
+			session.UserSession{CookieDomain: "example.com", Username: "john", AuthenticationMethodRefs: authorization.AuthenticationMethodsReferences{UsernameAndPassword: true}},
 			"http://myapp.example.com",
 			fasthttp.StatusOK,
 			false,
 		},
 		{
 			"ShouldReturnFalseOnBadDomainWithGoodScheme",
-			session.UserSession{CookieDomain: "example.com", Username: "john", AuthenticationMethodRefs: oidc.AuthenticationMethodsReferences{UsernameAndPassword: true}},
+			session.UserSession{CookieDomain: "example.com", Username: "john", AuthenticationMethodRefs: authorization.AuthenticationMethodsReferences{UsernameAndPassword: true}},
 			"https://myapp.notgood.com",
 			fasthttp.StatusOK,
 			false,
 		},
 		{
 			"ShouldReturnFalseOnBadDomainWithBadScheme",
-			session.UserSession{CookieDomain: "example.com", Username: "john", AuthenticationMethodRefs: oidc.AuthenticationMethodsReferences{UsernameAndPassword: true}},
+			session.UserSession{CookieDomain: "example.com", Username: "john", AuthenticationMethodRefs: authorization.AuthenticationMethodsReferences{UsernameAndPassword: true}},
 			"http://myapp.notgood.com",
 			fasthttp.StatusOK,
 			false,
@@ -82,7 +82,7 @@ func TestShouldFailOnInvalidBody(t *testing.T) {
 	mock := mocks.NewMockAutheliaCtxWithUserSession(t, session.UserSession{
 		CookieDomain: exampleDotCom,
 		Username:     "john",
-		AuthenticationMethodRefs: oidc.AuthenticationMethodsReferences{
+		AuthenticationMethodRefs: authorization.AuthenticationMethodsReferences{
 			UsernameAndPassword: true,
 		},
 	})
@@ -101,7 +101,7 @@ func TestShouldFailOnInvalidURL(t *testing.T) {
 	mock := mocks.NewMockAutheliaCtxWithUserSession(t, session.UserSession{
 		CookieDomain: exampleDotCom,
 		Username:     "john",
-		AuthenticationMethodRefs: oidc.AuthenticationMethodsReferences{
+		AuthenticationMethodRefs: authorization.AuthenticationMethodsReferences{
 			UsernameAndPassword: true,
 		},
 	})

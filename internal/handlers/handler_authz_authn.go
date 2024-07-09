@@ -559,7 +559,7 @@ func handleVerifyGETAuthorizationBearerIntrospection(ctx context.Context, provid
 		return "", osession.ClientID, true, authentication.OneFactor, nil
 	}
 
-	if oidc.NewAuthenticationMethodsReferencesFromClaim(osession.DefaultSession.Claims.AuthenticationMethodsReferences).MultiFactorAuthentication() {
+	if authorization.NewAuthenticationMethodsReferencesFromClaim(osession.DefaultSession.Claims.AuthenticationMethodsReferences).MultiFactorAuthentication() {
 		level = authentication.TwoFactor
 	} else {
 		level = authentication.OneFactor

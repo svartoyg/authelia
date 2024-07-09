@@ -4,10 +4,10 @@ import (
 	"net"
 	"time"
 
-	session "github.com/fasthttp/session/v2"
+	"github.com/fasthttp/session/v2"
 	"github.com/go-webauthn/webauthn/webauthn"
 
-	"github.com/authelia/authelia/v4/internal/oidc"
+	"github.com/authelia/authelia/v4/internal/authorization"
 )
 
 // ProviderConfig is the configuration used to create the session provider.
@@ -32,7 +32,7 @@ type UserSession struct {
 	FirstFactorAuthnTimestamp  int64
 	SecondFactorAuthnTimestamp int64
 
-	AuthenticationMethodRefs oidc.AuthenticationMethodsReferences
+	AuthenticationMethodRefs authorization.AuthenticationMethodsReferences
 
 	// WebAuthn holds the session registration data for this session.
 	WebAuthn *WebAuthn
