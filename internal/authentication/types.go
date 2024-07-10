@@ -267,6 +267,7 @@ type ldapUserProfileExtended struct {
 	PhoneNumber    string
 	PhoneExtension string
 	Address        *UserDetailsAddress
+	Extra          map[string]any
 
 	*ldapUserProfile
 }
